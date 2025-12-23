@@ -1,0 +1,4 @@
+How Does Machine Learning Work?
+The core process of Machine Learning typically involves three key steps. First, a model is trained using a prepared dataset, where it learns to map inputs to correct outputs. Next, the model's accuracy is tested on new, unseen data to see how well it generalizes. Finally, the trained model is used to make predictions or decisions on real-world data. This ability to learn from examples allows ML to power diverse applications, from translating languages between any pair to analyzing the sentiment behind customer reviews.
+In practice, it's like teaching a child through examples and then seeing them apply that knowledge in new situations. This core ability to learn, test, and apply is what makes Machine Learning so powerful — it’s not just about memorizing data, but about developing a form of digital intuition that grows smarter with each interaction.
+

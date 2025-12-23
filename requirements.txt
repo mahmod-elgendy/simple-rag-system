@@ -1,0 +1,10 @@
+flask
+faiss-cpu
+sentence-transformers
+wikipedia
+numpy
+torch
+transformers
+scikit-learn
+pandas
+regex
