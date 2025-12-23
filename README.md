@@ -1,159 +1,131 @@
-📚 Retrieval-Augmented Generation (RAG) Flask Application
+# 📚 Retrieval-Augmented Generation (RAG) Flask Application
 
-This project is a production-ready Retrieval-Augmented Generation (RAG) system built from a research notebook and deployed as a Flask web application with a simple UI.
+This project is a **production-ready Retrieval-Augmented Generation (RAG) system** originally developed in a research notebook and then **fully migrated into a Flask web application** with a browser-based UI.
 
-It combines:
+The system focuses on **grounded, citation-backed answers** using semantic retrieval over **local documents and Wikipedia**, with strong guardrails and confidence estimation.
 
-Semantic retrieval (FAISS + Sentence Transformers)
+---
 
-Grounded answer generation with citations
+## 🚀 Key Features
 
-Confidence-aware guardrails
+- 🔎 **Semantic Retrieval** using FAISS + Sentence Transformers
+- 🧠 **Sentence-level grounding** (answers must come from retrieved evidence)
+- 🛡 **Guardrails** to avoid vague or speculative answers
+- 📌 **Explicit citations** with retrieval & similarity scores
+- 📊 **Confidence scoring** based on retrieval strength
+- 🌐 **Hybrid knowledge base** (Local Documents + Wikipedia)
+- 🖥 **Flask-powered Web UI**
+- 🔁 **Designed for future self-learning** (feedback, memory, retraining)
 
-Wikipedia + local document sources
+---
 
-UI served via Flask
-
-Extensible self-learning foundation
-
-🚀 Features
-
-🔎 Chunk-level semantic retrieval using FAISS
-
-🧠 Sentence-level grounding (answers must come from retrieved context)
-
-🛡 Guardrails to avoid vague or speculative answers
-
-📌 Citations with retrieval scores & similarity
-
-📊 Confidence estimation based on retrieval strength
-
-🌐 Wikipedia + local documents as knowledge sources
-
-🖥 Web UI for interactive querying
-
-🔁 Designed for future self-learning (feedback, memory, retraining)
-
-
+## 🗂 Project Structure
 
 rag_app/
 │
-├── app.py                    # Flask application entry point
-├── requirements.txt          # Python dependencies
-├── README.md                 # Project documentation
+├── app.py # Flask application entry point
+├── requirements.txt # Python dependencies
+├── README.md # Project documentation
 │
-├── Documents/                # Local knowledge base
-│   ├── doc1.txt
-│   ├── doc2.txt
-│   └── doc3.txt
+├── Documents/ # Local knowledge base
+│ ├── doc1.txt
+│ ├── doc2.txt
+│ └── doc3.txt
 │
-├── ui/                       # Frontend UI
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
+├── ui/ # Frontend UI
+│ ├── index.html
+│ ├── style.css
+│ └── script.js
 │
-└── rag/                      # Core RAG logic (modularized from notebook)
-    ├── __init__.py
-    ├── ingestion.py          # Document loading, chunking, FAISS index
-    ├── pipeline.py           # RAG pipeline (retrieval → grounding → citation)
-    ├── models.py             # Embedding model
-    └── confidence.py         # Confidence computation
+└── rag/ # Core RAG logic (from notebook)
+├── init.py
+├── ingestion.py # Document ingestion, chunking, FAISS index
+├── pipeline.py # RAG pipeline (retrieval → grounding → citation)
+├── models.py # Embedding model loader
+└── confidence.py # Confidence computation
 
 
+---
 
+## 🧠 RAG Pipeline Overview
 
-
-🧠 RAG Pipeline Overview
-
-The system follows this flow:
-
+The system follows a **strict grounded-answer pipeline**:
 User Query
-   ↓
+↓
 Guarded Semantic Retrieval (FAISS)
-   ↓
+↓
 Chunk Filtering (confidence threshold)
-   ↓
-Context Sentence Extraction
-   ↓
-Sentence-Level Similarity Scoring
-   ↓
+↓
+Sentence Extraction from Chunks
+↓
+Sentence–Query Similarity Scoring
+↓
 Guardrail Filtering
-   ↓
+↓
 Grounded Answer + Citation
-   ↓
+↓
 Confidence Score
 
 
-Only answers grounded in retrieved content are returned.
+If **no reliable evidence** is found, the system refuses to hallucinate.
 
-🔍 Knowledge Sources
-1. Local Documents
+---
 
-Text files placed in the Documents/ directory:
+## 🔍 Knowledge Sources
 
-doc1.txt
+### 📄 Local Documents
+- Stored in the `Documents/` folder
+- Each `.txt` file is:
+  - Sentence-split
+  - Chunked
+  - Embedded
+  - Indexed
+  - Used as a citable source
 
-doc2.txt
-
-doc3.txt
-
-Each document is:
-
-Split into sentence chunks
-
-Embedded
-
-Indexed in FAISS
-
-Used for citation and grounding
-
-2. Wikipedia
-
+### 🌐 Wikipedia
 Automatically ingested summaries from:
+- **Football**
+- **Association football**
 
-Football
+Wikipedia content is treated the same as local documents and fully citable.
 
-Association football
+---
 
-🧩 Guardrails & Confidence
-Guarded Retrieval
+## 🧩 Guardrails & Confidence
 
-Uses cosine similarity
+### 🔐 Guarded Retrieval
+- Uses cosine similarity (FAISS Inner Product)
+- Filters chunks below a minimum similarity score (`MIN_SCORE = 0.45`)
+- If no chunk passes → no grounded answer is returned
 
-Filters chunks below a minimum score (MIN_SCORE = 0.45)
+### 🚫 Sentence Guardrail
+Rejects vague or non-factual sentences containing:
 
-If no chunk passes → no answer is generated
 
-Sentence Guardrail
+### 📊 Confidence Score
+Computed as the **mean similarity score** of the retrieved chunks used to answer the query.
 
-Prevents vague answers by rejecting sentences containing:
+---
 
-usually, between, include, some, variations
+## 🌐 Web Interface
 
-Confidence Score
+- Built with **HTML + CSS + JavaScript**
+- Served directly by Flask
+- Displays:
+  - Final Answer
+  - Confidence Score
+  - Evidence Chunks
+  - Source (Wikipedia or document)
 
-Computed as the mean retrieval score of the accepted chunks.
+The UI communicates with the backend via a `/ask` JSON API.
 
-🌐 Web Interface
+---
 
-Served via Flask
+## ⚙ Installation & Setup
 
-Simple HTML/CSS/JS frontend
+### 1️⃣ Install Dependencies
 
-Displays:
-
-Answer
-
-Confidence
-
-Retrieved evidence chunks
-
-Source (Wikipedia or document)
-
-⚙ Installation & Setup
-1️⃣ Install Dependencies
 pip install -r requirements.txt
-
 2️⃣ Run the Application
 python app.py
 
@@ -170,30 +142,48 @@ torch
 transformers
 regex
 
-🔁 Notebook → App Migration
+🔁 Notebook → Application Migration
 
-This project was originally developed as a research notebook and later:
+This project was originally developed as a Jupyter notebook and later:
 
-Modularized into clean Python files
+Modularized into clean Python modules
 
-Preserved exact RAG logic
+Preserved the exact RAG logic
 
 Converted into a Flask API
 
 Connected to a browser-based UI
 
-No core algorithmic logic was changed during migration.
+Kept notebook behavior intact (no algorithmic changes)
 
-🔮 Future Extensions (Planned)
+🔮 Planned Extensions
 
-👍👎 User feedback integration
+👍👎 User feedback collection
 
-🧠 Self-learning memory (query reformulation, KB expansion)
+🧠 Self-learning memory (query reformulation)
 
-🔄 Periodic retraining from interaction logs
+📚 Knowledge base expansion from high-confidence answers
+
+🔄 Periodic retraining
 
 📊 Analytics dashboard
 
-🐳 Docker deployment
+🐳 Dockerization
 
-☁ Cloud hosting
+☁ Cloud deployment
+
+🧑‍💻 Design Philosophy
+
+This system prioritizes:
+
+Correctness over fluency
+
+Grounded answers over hallucinations
+
+Explainability through citations
+
+Research-grade rigor with production readiness
+
+
+
+
